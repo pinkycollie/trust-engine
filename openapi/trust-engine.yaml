@@ -1,0 +1,101 @@
+openapi: 3.1.0
+info:
+  title: 9R Trust Engine API
+  version: 0.1.0
+  description: >
+    Computes a unified trust score across nine realms (9R) for a subject.
+
+paths:
+  /trust/score:
+    post:
+      summary: Compute trust score
+      operationId: computeTrustScore
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrustSignals"
+      responses:
+        "200":
+          description: Trust score computed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TrustScoreResult"
+
+components:
+  schemas:
+    TrustSignals:
+      type: object
+      properties:
+        identity:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        behavior:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        reputation:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        contribution:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        consistency:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        accessibility:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        security:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        governance:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+        intent:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+      additionalProperties: false
+
+    TrustScoreResult:
+      type: object
+      properties:
+        score:
+          type: number
+          format: float
+          description: Final normalized trust score in [0,1].
+        breakdown:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          description: Contribution of each realm to the final score.
+        weights:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          description: Weights used for each realm.
+      required:
+        - score
+        - breakdown
+        - weights
